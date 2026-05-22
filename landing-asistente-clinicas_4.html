@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Asistente Comercial para Clínicas | CADES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+<style>
+  /* ================================================
+     CADES BRAND COLORS — Paleta oficial
+     ================================================ */
+  :root {
+    --c-primary:    #1E2D40;   /* Azul Profundo */
+    --c-secondary:  #35506B;   /* Azul Médio */
+    --c-accent:     #7EB8D4;   /* Azul Suave */
+    --c-pastel:     #D7E8F2;   /* Azul Pastel */
+    --c-white:      #FFFFFF;
+    --c-gray-light: #F2F4F7;
+    --c-gray-mid:   #A7AEB7;
+    --c-gray-dark:  #2B2B2B;
+    --c-wp:         #25D366;
+
+    --shadow-sm:  0 2px 8px  rgba(30,45,64,.08);
+    --shadow-md:  0 8px 32px rgba(30,45,64,.13);
+    --shadow-lg:  0 24px 64px rgba(30,45,64,.18);
+    --r-sm:  8px;
+    --r-md: 16px;
+    --r-lg: 24px;
+    --r-xl: 32px;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family:'DM Sans', sans-serif;
+    background:var(--c-white);
+    color:var(--c-gray-dark);
+    line-height:1.65;
+    overflow-x:hidden;
+  }
+
+  /* ── TYPOGRAPHY ── */
+  h1,h2,h3,h4,h5 { font-family:'Sora',sans-serif; line-height:1.22; }
+  .display  { font-size:clamp(2.4rem,5vw,3.7rem); font-weight:700; letter-spacing:-.035em; }
+  .h2       { font-size:clamp(1.8rem,3vw,2.5rem);  font-weight:700; letter-spacing:-.025em; }
+  .h3       { font-size:1.15rem; font-weight:600; }
+  .lead     { font-size:1.05rem; color:var(--c-gray-mid); line-height:1.75; }
+  .tag {
+    display:inline-block; font-family:'Sora',sans-serif;
+    font-size:.7rem; font-weight:600; letter-spacing:.1em;
+    text-transform:uppercase; padding:.38rem 1rem;
+    border-radius:99px; margin-bottom:1rem;
+  }
+  .tag-accent  { background:var(--c-pastel); color:var(--c-secondary); }
+  .tag-primary { background:rgba(30,45,64,.08); color:var(--c-primary); }
+  .tag-light   { background:rgba(126,184,212,.18); color:var(--c-accent); }
+
+  /* ── LAYOUT ── */
+  .container { max-width:1140px; margin:0 auto; padding:0 28px; }
+  .section   { padding:96px 0; }
+  .section-alt { background:var(--c-gray-light); }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .grid4 { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  .tc  { text-align:center; }
+  .mt8 { margin-top:8px; }
+  .mt16{ margin-top:16px; }
+  .mt24{ margin-top:24px; }
+  .mt40{ margin-top:40px; }
+  .mt56{ margin-top:56px; }
+  .divider { width:52px; height:4px; border-radius:99px; background:var(--c-accent); margin:18px 0; }
+  .divider-c { margin:18px auto; }
+  @media(max-width:800px){
+    .grid2,.grid3,.grid4{ grid-template-columns:1fr; }
+    .section { padding:60px 0; }
+    .hide-mobile{ display:none !important; }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position:sticky; top:0; z-index:100;
+    background:rgba(255,255,255,.93);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(30,45,64,.08);
+    padding:13px 0;
+  }
+  .nav-inner { display:flex; align-items:center; justify-content:space-between; }
+  .logo {
+    display:flex; align-items:center; gap:10px;
+    font-family:'Sora',sans-serif; font-weight:700; font-size:1.25rem;
+    color:var(--c-primary); text-decoration:none;
+  }
+  .logo-tag {
+    background:var(--c-primary); color:var(--c-accent);
+    padding:3px 10px; border-radius:6px; font-size:.72rem; font-weight:700;
+    letter-spacing:.04em;
+  }
+  .nav-links { display:flex; gap:28px; list-style:none; }
+  .nav-links a { color:var(--c-gray-mid); text-decoration:none; font-size:.88rem; font-weight:500; transition:color .2s; }
+  .nav-links a:hover { color:var(--c-primary); }
+  .nav-right { display:flex; align-items:center; gap:14px; }
+
+  /* Language switcher */
+  .lang-sw { display:flex; gap:3px; background:var(--c-gray-light); border-radius:99px; padding:4px; }
+  .lang-btn {
+    background:none; border:none; cursor:pointer;
+    padding:5px 14px; border-radius:99px;
+    font-size:.75rem; font-weight:600; font-family:'Sora',sans-serif;
+    color:var(--c-gray-mid); transition:all .2s;
+  }
+  .lang-btn.active { background:var(--c-primary); color:var(--c-accent); }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display:inline-flex; align-items:center; gap:9px;
+    font-family:'Sora',sans-serif; font-weight:600; font-size:.93rem;
+    border-radius:11px; padding:13px 26px; cursor:pointer;
+    border:none; text-decoration:none;
+    transition:all .22s cubic-bezier(.4,0,.2,1);
+  }
+  .btn svg { width:19px; height:19px; flex-shrink:0; }
+  .btn-primary {
+    background:var(--c-primary); color:var(--c-accent);
+    box-shadow:0 4px 18px rgba(30,45,64,.28);
+  }
+  .btn-primary:hover { background:var(--c-secondary); transform:translateY(-2px); box-shadow:0 8px 28px rgba(30,45,64,.35); }
+  .btn-accent {
+    background:var(--c-accent); color:var(--c-primary);
+    box-shadow:0 4px 18px rgba(126,184,212,.35);
+  }
+  .btn-accent:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(126,184,212,.5); filter:brightness(1.06); }
+  .btn-outline { background:transparent; color:var(--c-primary); border:1.5px solid var(--c-pastel); }
+  .btn-outline:hover { border-color:var(--c-accent); background:var(--c-pastel); }
+  .btn-wp { background:var(--c-wp); color:#fff; box-shadow:0 4px 18px rgba(37,211,102,.32); }
+  .btn-wp:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(37,211,102,.45); }
+  .btn-white { background:#fff; color:var(--c-primary); }
+  .btn-white:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); }
+  .btn-lg { padding:17px 34px; font-size:1rem; border-radius:13px; }
+
+  /* ── HERO ── */
+  #hero {
+    background:linear-gradient(150deg, var(--c-gray-light) 0%, var(--c-pastel) 55%, #eaf4f0 100%);
+    padding:80px 0 0; overflow:hidden; position:relative;
+  }
+  #hero::before {
+    content:''; position:absolute; top:-160px; right:-160px;
+    width:520px; height:520px; border-radius:50%;
+    background:radial-gradient(circle, rgba(126,184,212,.22) 0%, transparent 68%);
+  }
+  .hero-text { padding-bottom:64px; position:relative; z-index:1; }
+  .hero-text .display { margin-bottom:18px; }
+  .hero-text .display em { color:var(--c-accent); font-style:normal; }
+  .hero-ctas { display:flex; gap:14px; margin-top:30px; flex-wrap:wrap; }
+  .hero-stats { display:flex; gap:32px; margin-top:44px; flex-wrap:wrap; }
+  .stat-num { font-family:'Sora',sans-serif; font-size:1.7rem; font-weight:700; color:var(--c-primary); }
+  .stat-lbl { font-size:.78rem; color:var(--c-gray-mid); margin-top:2px; }
+
+  /* ── PHONE MOCKUP ── */
+  .phone-wrap { position:relative; padding-bottom:40px; }
+  .phone-frame {
+    background:#E5DDD5; border-radius:32px; overflow:hidden;
+    box-shadow:var(--shadow-lg); max-width:340px; margin:0 auto;
+    border:9px solid #111827;
+  }
+  .phone-hdr {
+    background:#075E54; padding:13px 15px 11px;
+    display:flex; align-items:center; gap:11px;
+  }
+  .phone-av {
+    width:38px; height:38px; border-radius:50%; flex-shrink:0;
+    background:linear-gradient(135deg,var(--c-accent),var(--c-secondary));
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Sora',sans-serif; font-weight:700; color:#fff; font-size:.88rem;
+  }
+  .phone-hdr-txt h4 { color:#fff; font-size:.88rem; font-weight:600; font-family:'Sora',sans-serif; }
+  .phone-hdr-txt p  { color:rgba(255,255,255,.65); font-size:.7rem; }
+  .chat-area { padding:12px; min-height:360px; max-height:400px; overflow-y:auto; background:#E5DDD5; }
+  .msg { max-width:84%; margin-bottom:7px; }
+  .msg-in  { margin-right:auto; }
+  .msg-out { margin-left:auto; }
+  .bubble { padding:9px 13px; border-radius:11px; font-size:.82rem; line-height:1.55; }
+  .bubble-in  { background:#fff; border-bottom-left-radius:3px; color:#111; }
+  .bubble-out { background:#DCF8C6; border-bottom-right-radius:3px; color:#111; }
+  .msg-time { font-size:.66rem; color:#888; text-align:right; margin-top:2px; padding:0 2px; }
+  .chat-input-bar {
+    background:#f0f0f0; border-top:1px solid #ddd; padding:9px 11px;
+    display:flex; gap:8px; align-items:center;
+  }
+  .chat-input-fake {
+    flex:1; background:#fff; border-radius:99px; padding:9px 16px;
+    font-size:.79rem; color:#aaa; font-family:'DM Sans',sans-serif;
+  }
+  .send-btn {
+    width:36px; height:36px; border-radius:50%;
+    background:var(--c-wp); display:flex; align-items:center; justify-content:center;
+  }
+
+  /* floating badge */
+  .float-badge {
+    position:absolute; top:18px; right:-8px; z-index:2;
+    background:#fff; border:2px solid var(--c-accent); border-radius:14px;
+    padding:13px 18px; box-shadow:var(--shadow-md); max-width:170px;
+  }
+  .float-badge .fb-lbl { font-size:.7rem; color:var(--c-gray-mid); font-weight:500; }
+  .float-badge .fb-num { font-size:1.35rem; font-weight:700; color:var(--c-primary); font-family:'Sora',sans-serif; line-height:1; margin:2px 0; }
+  .float-badge .fb-tag { font-size:.7rem; color:var(--c-secondary); font-weight:600; }
+
+  /* ── TRUST BAR ── */
+  .trust-bar {
+    background:var(--c-primary); padding:18px 0; text-align:center;
+  }
+  .trust-bar p { color:rgba(255,255,255,.7); font-size:.85rem; }
+  .trust-bar strong { color:var(--c-accent); }
+
+  /* ── SECTORS ── */
+  .sector-grid { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:32px; }
+  .sec-badge {
+    background:#fff; border:1.5px solid var(--c-pastel); border-radius:99px;
+    padding:10px 22px; font-size:.87rem; font-weight:500; color:var(--c-secondary);
+    display:flex; align-items:center; gap:8px; transition:all .2s; cursor:default;
+  }
+  .sec-badge:hover { border-color:var(--c-accent); background:var(--c-pastel); color:var(--c-primary); }
+
+  /* ── PROBLEM CARDS ── */
+  .prob-card {
+    background:#fff; border:1px solid rgba(30,45,64,.1);
+    border-radius:var(--r-md); padding:28px 24px;
+    position:relative; overflow:hidden; transition:all .22s;
+  }
+  .prob-card::before {
+    content:''; position:absolute; top:0; left:0;
+    width:4px; height:100%; background:var(--c-accent);
+  }
+  .prob-card:hover { box-shadow:var(--shadow-md); transform:translateY(-3px); }
+  .prob-icon { font-size:1.9rem; margin-bottom:12px; }
+  .prob-card h3 { font-size:.97rem; margin-bottom:8px; color:var(--c-primary); }
+  .prob-card p  { font-size:.86rem; color:var(--c-gray-mid); line-height:1.65; }
+
+  /* ── FEATURE CARDS ── */
+  .feat-card {
+    background:#fff; border:1px solid rgba(30,45,64,.1);
+    border-radius:var(--r-md); padding:32px 26px; transition:all .25s;
+  }
+  .feat-card:hover { box-shadow:var(--shadow-md); transform:translateY(-4px); border-color:var(--c-accent); }
+  .feat-icon {
+    width:52px; height:52px; border-radius:14px;
+    background:var(--c-pastel); display:flex; align-items:center;
+    justify-content:center; font-size:1.4rem; margin-bottom:18px;
+  }
+  .feat-card h3 { font-size:.97rem; margin-bottom:9px; color:var(--c-primary); }
+  .feat-card p  { font-size:.86rem; color:var(--c-gray-mid); line-height:1.65; }
+
+  /* ── PROOF ── */
+  .proof-box {
+    background:linear-gradient(140deg,var(--c-primary) 0%,var(--c-secondary) 100%);
+    border-radius:var(--r-xl); padding:60px; color:#fff;
+    position:relative; overflow:hidden;
+  }
+  .proof-box::after {
+    content:'"'; position:absolute; right:32px; top:-24px;
+    font-size:16rem; opacity:.05; font-family:'Sora',sans-serif; color:#fff; line-height:1;
+  }
+  .proof-quote { font-size:1.25rem; line-height:1.65; font-style:italic; opacity:.95; margin-bottom:28px; max-width:700px; }
+  .proof-author { display:flex; align-items:center; gap:16px; }
+  .proof-av {
+    width:52px; height:52px; border-radius:50%;
+    background:var(--c-accent); display:flex; align-items:center;
+    justify-content:center; font-family:'Sora',sans-serif; font-weight:700;
+    color:var(--c-primary); font-size:1.05rem; flex-shrink:0;
+  }
+  .proof-author h4 { font-weight:600; font-size:1rem; }
+  .proof-author p  { font-size:.82rem; opacity:.65; margin-top:3px; }
+  .proof-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:44px; }
+  .proof-met-num { font-family:'Sora',sans-serif; font-size:2.2rem; font-weight:700; color:var(--c-accent); }
+  .proof-met-lbl { font-size:.79rem; opacity:.65; margin-top:4px; }
+  @media(max-width:600px){ .proof-box{ padding:36px 24px; } .proof-metrics{ grid-template-columns:1fr; } }
+
+  /* ── STEPS ── */
+  .step-item {
+    display:flex; gap:22px; align-items:flex-start;
+    background:#fff; border:1px solid rgba(30,45,64,.1);
+    border-radius:var(--r-md); padding:26px; transition:all .2s;
+  }
+  .step-item:hover { box-shadow:var(--shadow-sm); border-color:var(--c-pastel); }
+  .step-num {
+    min-width:46px; height:46px; border-radius:13px;
+    background:var(--c-primary); color:var(--c-accent);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Sora',sans-serif; font-size:1.15rem; font-weight:700; flex-shrink:0;
+  }
+  .step-item h3 { font-size:.97rem; color:var(--c-primary); margin-bottom:6px; }
+  .step-item p  { font-size:.86rem; color:var(--c-gray-mid); line-height:1.65; }
+
+  /* ── PRICING ── */
+  .price-card {
+    background:#fff; border:2px solid var(--c-pastel);
+    border-radius:var(--r-xl); padding:52px 44px;
+    max-width:540px; margin:0 auto; text-align:center;
+    box-shadow:var(--shadow-md); position:relative; overflow:hidden;
+  }
+  .price-card::before {
+    content:'POPULAR'; position:absolute; top:22px; right:-30px;
+    background:var(--c-accent); color:var(--c-primary); padding:6px 44px;
+    font-size:.7rem; font-weight:700; font-family:'Sora',sans-serif;
+    letter-spacing:.1em; transform:rotate(30deg);
+  }
+  .price-amount {
+    display:flex; align-items:baseline; justify-content:center; gap:5px;
+    font-family:'Sora',sans-serif; font-weight:700; color:var(--c-primary);
+    margin:20px 0 6px;
+  }
+  .price-eur  { font-size:2rem; margin-top:10px; }
+  .price-num  { font-size:4.2rem; letter-spacing:-.04em; }
+  .price-per  { font-size:1rem; color:var(--c-gray-mid); font-weight:400; }
+  .price-pilot {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--c-pastel); color:var(--c-secondary);
+    padding:9px 22px; border-radius:99px;
+    font-weight:600; font-size:.88rem; margin-bottom:32px;
+  }
+  .price-feats { text-align:left; list-style:none; margin:28px 0 36px; display:flex; flex-direction:column; gap:13px; }
+  .price-feats li { display:flex; gap:12px; font-size:.92rem; }
+  .chk { color:var(--c-accent); font-size:1.05rem; margin-top:1px; flex-shrink:0; font-weight:700; }
+
+  /* ── FAQ ── */
+  .faq-wrap { max-width:720px; margin:0 auto; display:flex; flex-direction:column; gap:10px; }
+  .faq-item { border:1px solid rgba(30,45,64,.1); border-radius:var(--r-md); overflow:hidden; transition:border-color .2s; }
+  .faq-item.open { border-color:var(--c-accent); }
+  .faq-trigger {
+    width:100%; background:#fff; border:none; padding:21px 22px;
+    display:flex; justify-content:space-between; align-items:center;
+    cursor:pointer; text-align:left; gap:16px;
+  }
+  .faq-trigger h3 { font-size:.95rem; font-weight:600; color:var(--c-primary); font-family:'Sora',sans-serif; }
+  .faq-arrow { font-size:1.25rem; color:var(--c-accent); transition:transform .22s; flex-shrink:0; font-weight:300; }
+  .faq-item.open .faq-arrow { transform:rotate(45deg); }
+  .faq-body { max-height:0; overflow:hidden; transition:max-height .32s ease; }
+  .faq-item.open .faq-body { max-height:280px; }
+  .faq-body p { padding:0 22px 20px; font-size:.88rem; color:var(--c-gray-mid); line-height:1.72; }
+
+  /* ── CTA SECTION ── */
+  .cta-sec {
+    background:linear-gradient(140deg,var(--c-primary) 0%,var(--c-secondary) 60%,#1a4060 100%);
+    padding:104px 0; text-align:center; position:relative; overflow:hidden;
+  }
+  .cta-sec::before {
+    content:''; position:absolute;
+    width:480px; height:480px; border-radius:50%;
+    background:radial-gradient(circle,rgba(126,184,212,.15) 0%,transparent 70%);
+    top:-180px; left:50%; transform:translateX(-50%);
+  }
+  .cta-sec h2 { color:#fff; font-size:clamp(1.9rem,4vw,3rem); margin-bottom:14px; }
+  .cta-sec p  { color:rgba(255,255,255,.7); font-size:1.05rem; margin-bottom:40px; max-width:540px; margin-left:auto; margin-right:auto; }
+  .cta-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+
+  /* ── FOOTER ── */
+  footer { background:#0D1924; color:rgba(255,255,255,.55); padding:52px 0 28px; }
+  .foot-inner { display:flex; justify-content:space-between; flex-wrap:wrap; gap:36px; }
+  .foot-brand .logo { color:#fff; }
+  .foot-brand p { font-size:.83rem; margin-top:12px; max-width:255px; line-height:1.65; }
+  .foot-links h4 { color:var(--c-accent); font-size:.8rem; font-weight:600; font-family:'Sora',sans-serif; letter-spacing:.07em; text-transform:uppercase; margin-bottom:14px; }
+  .foot-links a { display:block; color:rgba(255,255,255,.5); text-decoration:none; font-size:.82rem; margin-bottom:9px; transition:color .2s; }
+  .foot-links a:hover { color:var(--c-accent); }
+  .foot-bottom { border-top:1px solid rgba(255,255,255,.07); padding-top:24px; margin-top:44px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:.78rem; }
+  .foot-contact a { color:var(--c-accent); text-decoration:none; font-weight:600; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container nav-inner">
+    <a href="#" class="logo">CADES <span class="logo-tag">CLINICS</span></a>
+    <ul class="nav-links hide-mobile">
+      <li><a href="#problema"  data-i18n="n_prob">El problema</a></li>
+      <li><a href="#funciona"  data-i18n="n_how">Cómo funciona</a></li>
+      <li><a href="#precio"    data-i18n="n_price">Precio</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang-sw">
+        <button class="lang-btn active" onclick="setLang('es')">ES</button>
+        <button class="lang-btn"        onclick="setLang('ca')">CA</button>
+        <button class="lang-btn"        onclick="setLang('pt')">PT</button>
+        <button class="lang-btn"        onclick="setLang('en')">EN</button>
+      </div>
+      <a href="https://wa.me/34692352293" class="btn btn-primary hide-mobile" style="padding:10px 20px;font-size:.83rem;" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <span data-i18n="n_cta">Hablemos</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="grid2">
+      <div class="hero-text">
+        <span class="tag tag-accent" data-i18n="h_tag">Nuevo · Disponible ya</span>
+        <h1 class="display">
+          <span data-i18n="h_1a">Tu clínica atiende</span><br/>
+          <em data-i18n="h_1b">24 horas.</em>
+          <span data-i18n="h_1c"> Sin contratar</span><br/>
+          <span data-i18n="h_1d">a nadie más.</span>
+        </h1>
+        <p class="lead mt16" data-i18n="h_sub">El asistente comercial inteligente que responde en WhatsApp, agenda consultas y resuelve dudas de tus pacientes — aunque sean las 3 de la madrugada.</p>
+        <div class="hero-ctas">
+          <a href="https://wa.me/34692352293?text=Hola%20Sinval%2C%20quiero%20ver%20c%C3%B3mo%20funciona%20el%20asistente%20para%20mi%20cl%C3%ADnica" class="btn btn-wp btn-lg" target="_blank">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <span data-i18n="h_btn1">Quiero ver cómo funciona</span>
+          </a>
+          <a href="#precio" class="btn btn-outline btn-lg" data-i18n="h_btn2">Ver precio →</a>
+        </div>
+        <div class="hero-stats">
+          <div><div class="stat-num">24h</div><div class="stat-lbl" data-i18n="st1">Atención continua</div></div>
+          <div><div class="stat-num">4</div><div class="stat-lbl" data-i18n="st2">Idiomas</div></div>
+          <div><div class="stat-num">48h</div><div class="stat-lbl" data-i18n="st3">Para estar activo</div></div>
+          <div><div class="stat-num">0€</div><div class="stat-lbl" data-i18n="st4">Los primeros 30 días</div></div>
+        </div>
+      </div>
+
+      <!-- WhatsApp Mockup -->
+      <div class="phone-wrap">
+        <div class="phone-frame">
+          <div class="phone-hdr">
+            <div class="phone-av">G</div>
+            <div class="phone-hdr-txt">
+              <h4>Gabriela · Clínica Dental</h4>
+              <p>● En línea · responde al instante</p>
+            </div>
+          </div>
+          <div class="chat-area">
+            <div class="msg msg-out" style="animation:fadeUp .4s ease both .1s">
+              <div class="bubble bubble-out" data-i18n="chat1">Hola, ¿están abiertos ahora? Quería preguntar por un implante 😅</div>
+              <div class="msg-time">22:47 ✓✓</div>
+            </div>
+            <div class="msg msg-in" style="animation:fadeUp .4s ease both .6s">
+              <div class="bubble bubble-in" data-i18n="chat2">¡Hola! Soy Gabriela, del equipo de la Dra. Claure 😊 Estamos cerrados ahora, pero estoy aquí para ayudarte.</div>
+              <div class="msg-time">22:47</div>
+            </div>
+            <div class="msg msg-in" style="animation:fadeUp .4s ease both 1s">
+              <div class="bubble bubble-in" data-i18n="chat3">Los implantes son una de nuestras especialidades. La Dra. lleva 20 años dedicada a esto, con formación en NYU y Harvard.</div>
+              <div class="msg-time">22:47</div>
+            </div>
+            <div class="msg msg-out" style="animation:fadeUp .4s ease both 1.4s">
+              <div class="bubble bubble-out" data-i18n="chat4">¡Perfecto! ¿Cómo puedo pedir cita?</div>
+              <div class="msg-time">22:48 ✓✓</div>
+            </div>
+            <div class="msg msg-in" style="animation:fadeUp .4s ease both 1.8s">
+              <div class="bubble bubble-in" data-i18n="chat5">¡Aquí mismo! Elige día y hora en menos de 1 minuto 👇<br/><br/><span style="color:#128C7E;font-weight:600;">🔗 app.clinic-cloud.com/GabrielaClaure</span></div>
+              <div class="msg-time">22:48</div>
+            </div>
+          </div>
+          <div class="chat-input-bar">
+            <div class="chat-input-fake" data-i18n="chat_ph">Escribe un mensaje...</div>
+            <div class="send-btn">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="float-badge">
+          <div class="fb-lbl" data-i18n="fb_lbl">Paciente captado a las</div>
+          <div class="fb-num">22:48</div>
+          <div class="fb-tag" data-i18n="fb_tag">Fuera de horario ✓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="container">
+    <p data-i18n="trust">Ya en uso en &nbsp;<strong>Clínica Odontológica Dra. Gabriela Claure · Barcelona</strong>&nbsp; · Castellano · Català · English · Português</p>
+  </div>
+</div>
+
+<!-- SECTORS -->
+<section class="section" id="sectores">
+  <div class="container tc">
+    <span class="tag tag-primary" data-i18n="sec_tag">Sectores</span>
+    <h2 class="h2" data-i18n="sec_h2">Para cualquier clínica que cuide a sus pacientes</h2>
+    <div class="divider divider-c"></div>
+    <p class="lead" style="max-width:540px;margin:0 auto" data-i18n="sec_sub">Tanto si atiendes sonrisas, bienestar o estética — el asistente se adapta a tu protocolo y tus tratamientos.</p>
+    <div class="sector-grid">
+      <div class="sec-badge">🦷 <span data-i18n="s1">Odontología</span></div>
+      <div class="sec-badge">💉 <span data-i18n="s2">Medicina estética</span></div>
+      <div class="sec-badge">🩺 <span data-i18n="s3">Clínicas médicas</span></div>
+      <div class="sec-badge">✨ <span data-i18n="s4">Centros de estética</span></div>
+      <div class="sec-badge">🦴 <span data-i18n="s5">Fisioterapia</span></div>
+      <div class="sec-badge">👁️ <span data-i18n="s6">Oftalmología</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
+<section class="section section-alt" id="problema">
+  <div class="container">
+    <div class="tc" style="margin-bottom:48px">
+      <span class="tag tag-primary" data-i18n="p_tag">El problema real</span>
+      <h2 class="h2" data-i18n="p_h2">Cada noche pierdes pacientes que nadie atiende</h2>
+      <div class="divider divider-c"></div>
+      <p class="lead" style="max-width:560px;margin:0 auto" data-i18n="p_sub">Escriben por WhatsApp, no reciben respuesta, y al día siguiente buscan otra clínica. Es silencioso, pero costoso.</p>
+    </div>
+    <div class="grid4">
+      <div class="prob-card"><div class="prob-icon">🌙</div><h3 data-i18n="p1h">El paciente escribe de noche</h3><p data-i18n="p1p">El 40% de las consultas llegan fuera de horario. Sin respuesta inmediata, el interés se enfría en minutos.</p></div>
+      <div class="prob-card"><div class="prob-icon">📵</div><h3 data-i18n="p2h">Silencio = competidor</h3><p data-i18n="p2p">Mientras el paciente espera tu respuesta, ya está mirando la web de la clínica de al lado.</p></div>
+      <div class="prob-card"><div class="prob-icon">📋</div><h3 data-i18n="p3h">Recepción desbordada</h3><p data-i18n="p3p">Tu equipo pasa horas respondiendo las mismas preguntas. Tiempo que podrían dedicar a los pacientes presenciales.</p></div>
+      <div class="prob-card"><div class="prob-icon">🗓️</div><h3 data-i18n="p4h">Citas perdidas por fricción</h3><p data-i18n="p4p">El proceso de agendar por teléfono tiene demasiados pasos. El asistente lo hace en segundos, en WhatsApp.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="funciona">
+  <div class="container">
+    <div class="tc" style="margin-bottom:48px">
+      <span class="tag tag-accent" data-i18n="f_tag">Funcionalidades</span>
+      <h2 class="h2" data-i18n="f_h2">Todo lo que hace por tu clínica</h2>
+      <div class="divider divider-c"></div>
+    </div>
+    <div class="grid3">
+      <div class="feat-card"><div class="feat-icon">🕐</div><h3 data-i18n="f1h">Disponible 24/7</h3><p data-i18n="f1p">Responde en segundos, cualquier día, a cualquier hora. Sin colas, sin esperas, sin coste de personal extra.</p></div>
+      <div class="feat-card"><div class="feat-icon">📅</div><h3 data-i18n="f2h">Agenda automática</h3><p data-i18n="f2p">El paciente escoge su cita directamente en el chat. Confirmación inmediata. Sin llamadas. Sin WhatsApp manual.</p></div>
+      <div class="feat-card"><div class="feat-icon">🌍</div><h3 data-i18n="f3h">4 idiomas nativos</h3><p data-i18n="f3p">Detecta automáticamente el idioma del paciente: castellano, català, English, português. Sin configuración extra.</p></div>
+      <div class="feat-card"><div class="feat-icon">🦷</div><h3 data-i18n="f4h">Responde dudas clínicas</h3><p data-i18n="f4p">Sabe qué hacer y qué no tras una cirugía, cómo cuidar un implante, cuándo ir a urgencias. Formado con tu protocolo.</p></div>
+      <div class="feat-card"><div class="feat-icon">🔒</div><h3 data-i18n="f5h">Cumple el RGPD</h3><p data-i18n="f5p">Obtiene el consentimiento del paciente antes de tratar sus datos. Proceso integrado en la conversación.</p></div>
+      <div class="feat-card"><div class="feat-icon">🧠</div><h3 data-i18n="f6h">Tono de tu clínica</h3><p data-i18n="f6p">No suena a bot. Habla con el tono y la personalidad de tu equipo. El paciente nunca nota la diferencia.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="proof-box">
+      <p class="proof-quote" data-i18n="q_text">"Desde que tenemos el asistente, ningún paciente que escribe por la noche se queda sin respuesta. La agenda se llena sola. El equipo puede centrarse en lo que realmente importa: la atención en la consulta."</p>
+      <div class="proof-author">
+        <div class="proof-av">GC</div>
+        <div>
+          <h4>Dra. Gabriela Claure</h4>
+          <p data-i18n="q_clinic">Clínica Odontológica & Estética Orofacial · Carrer Calvet, 16 · Barcelona</p>
+        </div>
+      </div>
+      <div class="proof-metrics">
+        <div><div class="proof-met-num">100%</div><div class="proof-met-lbl" data-i18n="m1">Mensajes respondidos</div></div>
+        <div><div class="proof-met-num">48h</div><div class="proof-met-lbl" data-i18n="m2">Puesta en marcha</div></div>
+        <div><div class="proof-met-num">24/7</div><div class="proof-met-lbl" data-i18n="m3">Atención sin parar</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="como-funciona">
+  <div class="container">
+    <div class="tc" style="margin-bottom:48px">
+      <span class="tag tag-primary" data-i18n="hw_tag">Sin complicaciones</span>
+      <h2 class="h2" data-i18n="hw_h2">Activo en 3 pasos, en 48 horas</h2>
+      <div class="divider divider-c"></div>
+    </div>
+    <div style="max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:18px">
+      <div class="step-item"><div class="step-num">1</div><div><h3 data-i18n="s1h">Llamada de 10 minutos</h3><p data-i18n="s1p">Me cuentas cómo es tu clínica, tus tratamientos y cómo prefieres comunicarte con los pacientes. Sin tecnicismos.</p></div></div>
+      <div class="step-item"><div class="step-num">2</div><div><h3 data-i18n="s2h">Configuramos juntos</h3><p data-i18n="s2p">Adapto el asistente a tu protocolo, tus tratamientos y tu tono de voz. Tú revisas y apruebas antes de lanzar.</p></div></div>
+      <div class="step-item"><div class="step-num">3</div><div><h3 data-i18n="s3h">En marcha en 48h</h3><p data-i18n="s3p">Conectamos el asistente a tu WhatsApp. Tú controlas todo y puedes intervenir en cualquier conversación cuando quieras.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section section-alt" id="precio">
+  <div class="container">
+    <div class="tc" style="margin-bottom:48px">
+      <span class="tag tag-primary" data-i18n="pr_tag">Precio</span>
+      <h2 class="h2" data-i18n="pr_h2">Simple. Sin sorpresas.</h2>
+      <div class="divider divider-c"></div>
+    </div>
+    <div class="price-card">
+      <span class="tag tag-accent" data-i18n="pr_plan">Asistente Comercial Inteligente</span>
+      <div class="price-amount">
+        <span class="price-eur">€</span>
+        <span class="price-num">199</span>
+        <span class="price-per" data-i18n="pr_per">/mes</span>
+      </div>
+      <div class="price-pilot">✓ <span data-i18n="pr_pilot">30 días de piloto gratuito · sin compromiso</span></div>
+      <ul class="price-feats">
+        <li><span class="chk">✓</span><span data-i18n="pf1">Asistente activo 24h en tu WhatsApp</span></li>
+        <li><span class="chk">✓</span><span data-i18n="pf2">Agenda de citas automática</span></li>
+        <li><span class="chk">✓</span><span data-i18n="pf3">Respuestas en castellano, català, english y português</span></li>
+        <li><span class="chk">✓</span><span data-i18n="pf4">Formado con los protocolos y tratamientos de tu clínica</span></li>
+        <li><span class="chk">✓</span><span data-i18n="pf5">Responde dudas clínicas y post-quirúrgicas</span></li>
+        <li><span class="chk">✓</span><span data-i18n="pf6">Cumplimiento RGPD integrado</span></li>
+        <li><span class="chk">✓</span><span data-i18n="pf7">Soporte y ajustes continuos incluidos</span></li>
+        <li><span class="chk">✓</span><span data-i18n="pf8">Sin contrato de permanencia</span></li>
+      </ul>
+      <a href="https://wa.me/34692352293?text=Hola%20Sinval%2C%20quiero%20empezar%20el%20piloto%20gratuito%20de%2030%20d%C3%ADas" class="btn btn-wp btn-lg" style="width:100%;justify-content:center" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <span data-i18n="pr_btn">Empezar el piloto gratuito</span>
+      </a>
+      <p style="margin-top:14px;font-size:.8rem;color:var(--c-gray-mid)" data-i18n="pr_note">Sin tarjeta de crédito · Sin contrato · Cancela cuando quieras</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="tc" style="margin-bottom:48px">
+      <span class="tag tag-primary">FAQ</span>
+      <h2 class="h2" data-i18n="faq_h2">Preguntas frecuentes</h2>
+      <div class="divider divider-c"></div>
+    </div>
+    <div class="faq-wrap">
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)"><h3 data-i18n="fq1q">¿Parece un robot hablando con mis pacientes?</h3><span class="faq-arrow">+</span></button>
+        <div class="faq-body"><p data-i18n="fq1a">No. El asistente está configurado con la personalidad y el tono de tu clínica. Responde de forma natural y empática. Los pacientes de la Clínica Dra. Gabriela no saben que es un asistente.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)"><h3 data-i18n="fq2q">¿Qué pasa si el paciente quiere hablar con una persona?</h3><span class="faq-arrow">+</span></button>
+        <div class="faq-body"><p data-i18n="fq2a">El asistente identifica cuándo una situación necesita intervención humana (urgencias, reclamaciones, casos complejos) y escala al equipo. Tú puedes entrar en la conversación en cualquier momento.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)"><h3 data-i18n="fq3q">¿Qué pasa con los datos de mis pacientes? ¿Cumple el RGPD?</h3><span class="faq-arrow">+</span></button>
+        <div class="faq-body"><p data-i18n="fq3a">Sí, cumple el RGPD (Reglamento UE 2016/679). El asistente obtiene el consentimiento explícito antes de recoger cualquier dato. Los datos no se comparten con terceros y se almacenan de forma segura.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)"><h3 data-i18n="fq4q">¿Cuánto tiempo tarda en estar listo?</h3><span class="faq-arrow">+</span></button>
+        <div class="faq-body"><p data-i18n="fq4a">En 48 horas desde nuestra primera llamada. Configuramos todo juntos, tú apruebas el contenido y conectamos al WhatsApp de tu clínica. Sin tecnicismos ni complicaciones.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)"><h3 data-i18n="fq5q">¿Funciona con mi número de WhatsApp actual?</h3><span class="faq-arrow">+</span></button>
+        <div class="faq-body"><p data-i18n="fq5a">Sí. Conectamos el asistente al número de WhatsApp Business que ya usa tu clínica. Los pacientes no notarán ningún cambio — solo que ahora siempre obtienen respuesta.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)"><h3 data-i18n="fq6q">¿Y si decido cancelar?</h3><span class="faq-arrow">+</span></button>
+        <div class="faq-body"><p data-i18n="fq6a">Sin permanencia. Cancelas con un WhatsApp cuando quieras. Sin contrato que firmar, sin penalización. Estamos aquí porque funciona, no porque tengas que quedarte.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-sec">
+  <div class="container" style="position:relative;z-index:1">
+    <span class="tag" style="background:rgba(126,184,212,.15);color:var(--c-accent)" data-i18n="cta_tag">30 días gratis · sin compromiso</span>
+    <h2 data-i18n="cta_h2">¿Tu clínica merece<br/>un asistente así?</h2>
+    <p data-i18n="cta_sub">10 minutos de llamada. Sin tecnicismos. Te cuento exactamente cómo funcionaría en tu clínica.</p>
+    <div class="cta-btns">
+      <a href="https://wa.me/34692352293?text=Hola%20Sinval%2C%20quiero%20ver%20c%C3%B3mo%20funciona%20el%20asistente%20para%20mi%20cl%C3%ADnica" class="btn btn-wp btn-lg" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <span data-i18n="cta_wp">Escribir a Sinval por WhatsApp</span>
+      </a>
+      <a href="mailto:sinval.dias@cadesconsulting.es" class="btn btn-accent btn-lg">✉ sinval.dias@cadesconsulting.es</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-inner">
+      <div class="foot-brand">
+        <a href="#" class="logo" style="color:#fff">CADES <span class="logo-tag">CLINICS</span></a>
+        <p style="margin-top:12px">Asistentes comerciales inteligentes para clínicas. Barcelona · España · Brasil.</p>
+        <div class="foot-contact" style="margin-top:16px;display:flex;gap:14px;flex-wrap:wrap">
+          <a href="https://wa.me/34692352293">+34 692 352 293</a>
+          <a href="mailto:sinval.dias@cadesconsulting.es">sinval.dias@cadesconsulting.es</a>
+        </div>
+      </div>
+      <div class="foot-links">
+        <h4 data-i18n="fl1">Producto</h4>
+        <a href="#funciona" data-i18n="fl1a">Cómo funciona</a>
+        <a href="#precio"   data-i18n="fl1b">Precio</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="foot-links">
+        <h4 data-i18n="fl2">Sectores</h4>
+        <a href="#" data-i18n="fl2a">Odontología</a>
+        <a href="#" data-i18n="fl2b">Medicina estética</a>
+        <a href="#" data-i18n="fl2c">Fisioterapia</a>
+      </div>
+      <div class="foot-links">
+        <h4 data-i18n="fl3">Legal</h4>
+        <a href="#" data-i18n="fl3a">Política de privacidad</a>
+        <a href="#" data-i18n="fl3b">Aviso RGPD</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2025 CADES Consulting · Castellbisbal, Barcelona</span>
+      <span data-i18n="fl_made">Hecho con ❤ para clínicas que cuidan a sus pacientes</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+</style>
+
+<script>
+// ══ FAQ ══
+function toggleFaq(btn){
+  const item = btn.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
+
+// ══ I18N ══
+const T = {
+  es:{
+    n_prob:"El problema", n_how:"Cómo funciona", n_price:"Precio", n_cta:"Hablemos",
+    h_tag:"Nuevo · Disponible ya",
+    h_1a:"Tu clínica atiende", h_1b:"24 horas.", h_1c:" Sin contratar", h_1d:"a nadie más.",
+    h_sub:"El asistente comercial inteligente que responde en WhatsApp, agenda consultas y resuelve dudas de tus pacientes — aunque sean las 3 de la madrugada.",
+    h_btn1:"Quiero ver cómo funciona", h_btn2:"Ver precio →",
+    st1:"Atención continua", st2:"Idiomas", st3:"Para estar activo", st4:"Los primeros 30 días",
+    fb_lbl:"Paciente captado a las", fb_tag:"Fuera de horario ✓",
+    chat1:"Hola, ¿están abiertos ahora? Quería preguntar por un implante 😅",
+    chat2:"¡Hola! Soy Gabriela, del equipo de la Dra. Claure 😊 Estamos cerrados ahora, pero estoy aquí para ayudarte.",
+    chat3:"Los implantes son una de nuestras especialidades. La Dra. lleva 20 años dedicada a esto, con formación en NYU y Harvard.",
+    chat4:"¡Perfecto! ¿Cómo puedo pedir cita?",
+    chat5:"¡Aquí mismo! Elige día y hora en menos de 1 minuto 👇\n\n🔗 app.clinic-cloud.com/GabrielaClaure",
+    chat_ph:"Escribe un mensaje...",
+    trust:"Ya en uso en &nbsp;<strong>Clínica Odontológica Dra. Gabriela Claure · Barcelona</strong>&nbsp; · Castellano · Català · English · Português",
+    sec_tag:"Sectores", sec_h2:"Para cualquier clínica que cuide a sus pacientes",
+    sec_sub:"Tanto si atiendes sonrisas, bienestar o estética — el asistente se adapta a tu protocolo y tus tratamientos.",
+    s1:"Odontología", s2:"Medicina estética", s3:"Clínicas médicas", s4:"Centros de estética", s5:"Fisioterapia", s6:"Oftalmología",
+    p_tag:"El problema real", p_h2:"Cada noche pierdes pacientes que nadie atiende",
+    p_sub:"Escriben por WhatsApp, no reciben respuesta, y al día siguiente buscan otra clínica. Es silencioso, pero costoso.",
+    p1h:"El paciente escribe de noche", p1p:"El 40% de las consultas llegan fuera de horario. Sin respuesta inmediata, el interés se enfría en minutos.",
+    p2h:"Silencio = competidor", p2p:"Mientras el paciente espera tu respuesta, ya está mirando la web de la clínica de al lado.",
+    p3h:"Recepción desbordada", p3p:"Tu equipo pasa horas respondiendo las mismas preguntas. Tiempo que podrían dedicar a los pacientes presenciales.",
+    p4h:"Citas perdidas por fricción", p4p:"El proceso de agendar por teléfono tiene demasiados pasos. El asistente lo hace en segundos, en WhatsApp.",
+    f_tag:"Funcionalidades", f_h2:"Todo lo que hace por tu clínica",
+    f1h:"Disponible 24/7", f1p:"Responde en segundos, cualquier día, a cualquier hora. Sin colas, sin esperas, sin coste extra.",
+    f2h:"Agenda automática", f2p:"El paciente escoge su cita directamente en el chat. Confirmación inmediata. Sin llamadas.",
+    f3h:"4 idiomas nativos", f3p:"Detecta el idioma del paciente: castellano, català, English, português. Sin configuración extra.",
+    f4h:"Responde dudas clínicas", f4p:"Sabe qué hacer tras una cirugía, cómo cuidar un implante, cuándo ir a urgencias.",
+    f5h:"Cumple el RGPD", f5p:"Obtiene el consentimiento del paciente antes de tratar sus datos.",
+    f6h:"Tono de tu clínica", f6p:"No suena a bot. Habla con el tono y la personalidad de tu equipo.",
+    q_text:'"Desde que tenemos el asistente, ningún paciente que escribe por la noche se queda sin respuesta. La agenda se llena sola."',
+    q_clinic:"Clínica Odontológica & Estética Orofacial · Carrer Calvet, 16 · Barcelona",
+    m1:"Mensajes respondidos", m2:"Puesta en marcha", m3:"Atención sin parar",
+    hw_tag:"Sin complicaciones", hw_h2:"Activo en 3 pasos, en 48 horas",
+    s1h:"Llamada de 10 minutos", s1p:"Me cuentas cómo es tu clínica, tus tratamientos y cómo prefieres comunicarte. Sin tecnicismos.",
+    s2h:"Configuramos juntos", s2p:"Adapto el asistente a tu protocolo y tono de voz. Tú revisas y apruebas antes de lanzar.",
+    s3h:"En marcha en 48h", s3p:"Conectamos el asistente a tu WhatsApp. Tú controlas todo y puedes intervenir cuando quieras.",
+    pr_tag:"Precio", pr_h2:"Simple. Sin sorpresas.", pr_plan:"Asistente Comercial Inteligente",
+    pr_per:"/mes", pr_pilot:"30 días de piloto gratuito · sin compromiso",
+    pf1:"Asistente activo 24h en tu WhatsApp", pf2:"Agenda de citas automática",
+    pf3:"Respuestas en castellano, català, english y português",
+    pf4:"Formado con los protocolos y tratamientos de tu clínica",
+    pf5:"Responde dudas clínicas y post-quirúrgicas", pf6:"Cumplimiento RGPD integrado",
+    pf7:"Soporte y ajustes continuos incluidos", pf8:"Sin contrato de permanencia",
+    pr_btn:"Empezar el piloto gratuito", pr_note:"Sin tarjeta de crédito · Sin contrato · Cancela cuando quieras",
+    faq_h2:"Preguntas frecuentes",
+    fq1q:"¿Parece un robot hablando con mis pacientes?", fq1a:"No. El asistente está configurado con la personalidad de tu clínica. Los pacientes de la Dra. Gabriela no saben que es un asistente.",
+    fq2q:"¿Qué pasa si el paciente quiere hablar con una persona?", fq2a:"Identifica cuándo es necesaria la intervención humana y escala al equipo. Tú puedes entrar cuando quieras.",
+    fq3q:"¿Qué pasa con los datos de mis pacientes? ¿Cumple el RGPD?", fq3a:"Sí. Obtiene el consentimiento explícito antes de recoger cualquier dato, cumpliendo el RGPD (UE 2016/679). Datos nunca cedidos a terceros.",
+    fq4q:"¿Cuánto tiempo tarda en estar listo?", fq4a:"48 horas desde nuestra primera llamada. Sin tecnicismos ni complicaciones.",
+    fq5q:"¿Funciona con mi número de WhatsApp actual?", fq5a:"Sí. Conectamos al número que ya usas. Los pacientes no notarán ningún cambio.",
+    fq6q:"¿Y si decido cancelar?", fq6a:"Sin permanencia. Cancelas con un WhatsApp cuando quieras. Sin contrato, sin penalización.",
+    cta_tag:"30 días gratis · sin compromiso", cta_h2:"¿Tu clínica merece\nun asistente así?",
+    cta_sub:"10 minutos de llamada. Sin tecnicismos. Te cuento exactamente cómo funcionaría en tu clínica.",
+    cta_wp:"Escribir a Sinval por WhatsApp",
+    fl1:"Producto", fl1a:"Cómo funciona", fl1b:"Precio",
+    fl2:"Sectores", fl2a:"Odontología", fl2b:"Medicina estética", fl2c:"Fisioterapia",
+    fl3:"Legal", fl3a:"Política de privacidad", fl3b:"Aviso RGPD",
+    fl_made:"Hecho con ❤ para clínicas que cuidan a sus pacientes"
+  },
+  ca:{
+    n_prob:"El problema", n_how:"Com funciona", n_price:"Preu", n_cta:"Parlem",
+    h_tag:"Nou · Disponible ja",
+    h_1a:"La teva clínica atén", h_1b:"24 hores.", h_1c:" Sense contractar", h_1d:"ningú més.",
+    h_sub:"L'assistent comercial intel·ligent que respon al WhatsApp, agenda consultes i resol dubtes dels teus pacients — fins i tot a les 3 de la matinada.",
+    h_btn1:"Vull veure com funciona", h_btn2:"Veure preu →",
+    st1:"Atenció contínua", st2:"Idiomes", st3:"Per estar actiu", st4:"Els primers 30 dies",
+    fb_lbl:"Pacient captat a les", fb_tag:"Fora d'horari ✓",
+    chat1:"Hola, esteu oberts ara? Volia preguntar per un implant 😅",
+    chat2:"Hola! Sóc la Gabriela, de l'equip de la Dra. Claure 😊 Estem tancats ara, però sóc aquí per ajudar-te.",
+    chat3:"Els implants són una de les nostres especialitats. La Dra. porta 20 anys dedicada a això, amb formació a NYU i Harvard.",
+    chat4:"Perfecte! Com puc demanar cita?",
+    chat5:"Aquí mateix! Tria dia i hora en menys d'1 minut 👇\n\n🔗 app.clinic-cloud.com/GabrielaClaure",
+    chat_ph:"Escriu un missatge...",
+    trust:"Ja en ús a &nbsp;<strong>Clínica Odontològica Dra. Gabriela Claure · Barcelona</strong>&nbsp; · Castellà · Català · English · Português",
+    sec_tag:"Sectors", sec_h2:"Per a qualsevol clínica que cuidi els seus pacients",
+    sec_sub:"Tant si ateens somriures, benestar o estètica — l'assistent s'adapta al teu protocol.",
+    s1:"Odontologia", s2:"Medicina estètica", s3:"Clíniques mèdiques", s4:"Centres d'estètica", s5:"Fisioteràpia", s6:"Oftalmologia",
+    p_tag:"El problema real", p_h2:"Cada nit perds pacients que ningú atén",
+    p_sub:"Escriuen per WhatsApp, no reben resposta, i l'endemà busquen una altra clínica.",
+    p1h:"El pacient escriu de nit", p1p:"El 40% de les consultes arriben fora d'horari. Sense resposta, l'interès es refreda en minuts.",
+    p2h:"Silenci = competidor", p2p:"Mentre el pacient espera la teva resposta, ja mira la web de la clínica del costat.",
+    p3h:"Recepció desbordada", p3p:"El teu equip passa hores responent les mateixes preguntes.",
+    p4h:"Cites perdudes per fricció", p4p:"L'assistent agenda en segons, directament al WhatsApp.",
+    f_tag:"Funcionalitats", f_h2:"Tot el que fa per la teva clínica",
+    f1h:"Disponible 24/7", f1p:"Respon en segons, qualsevol dia, a qualsevol hora.",
+    f2h:"Agenda automàtica", f2p:"El pacient tria la cita directament al xat. Confirmació immediata.",
+    f3h:"4 idiomes natius", f3p:"Detecta l'idioma del pacient: castellà, català, English, português.",
+    f4h:"Respon dubtes clínics", f4p:"Sap què fer després d'una cirurgia, com cuidar un implant, quan anar a urgències.",
+    f5h:"Compleix el RGPD", f5p:"Obté el consentiment del pacient abans de tractar les seves dades.",
+    f6h:"To de la teva clínica", f6p:"No sona a bot. Parla amb el to i la personalitat del teu equip.",
+    q_text:'"Des que tenim l\'assistent, cap pacient que escriu de nit es queda sense resposta. L\'agenda s\'omple sola."',
+    q_clinic:"Clínica Odontològica & Estètica Orofacial · Carrer Calvet, 16 · Barcelona",
+    m1:"Missatges resposts", m2:"Posada en marxa", m3:"Atenció sense parar",
+    hw_tag:"Sense complicacions", hw_h2:"Actiu en 3 passos, en 48 hores",
+    s1h:"Trucada de 10 minuts", s1p:"Em parles de la teva clínica, els teus tractaments i com prefereixes comunicar-te.",
+    s2h:"Configurem junts", s2p:"Adapto l'assistent al teu protocol. Tu revises i aproves abans de llançar.",
+    s3h:"En marxa en 48h", s3p:"Connectem al WhatsApp de la teva clínica. Tu controles tot.",
+    pr_tag:"Preu", pr_h2:"Simple. Sense sorpreses.", pr_plan:"Assistent Comercial Intel·ligent",
+    pr_per:"/mes", pr_pilot:"30 dies de pilot gratuït · sense compromís",
+    pf1:"Assistent actiu 24h al teu WhatsApp", pf2:"Agenda de cites automàtica",
+    pf3:"Respostes en castellà, català, english i português",
+    pf4:"Format amb els protocols i tractaments de la teva clínica",
+    pf5:"Respon dubtes clínics i post-quirúrgics", pf6:"Compliment RGPD integrat",
+    pf7:"Suport i ajustos continus inclosos", pf8:"Sense contracte de permanència",
+    pr_btn:"Començar el pilot gratuït", pr_note:"Sense targeta de crèdit · Sense contracte · Cancel·la quan vulguis",
+    faq_h2:"Preguntes freqüents",
+    fq1q:"Sembla un robot parlant amb els meus pacients?", fq1a:"No. Està configurat amb la personalitat de la teva clínica. Els pacients de la Dra. Gabriela no saben que és un assistent.",
+    fq2q:"Què passa si el pacient vol parlar amb una persona?", fq2a:"Identifica quan cal intervenció humana i escala a l'equip.",
+    fq3q:"Què passa amb les dades dels meus pacients?", fq3a:"Compleix el RGPD. Obté el consentiment explícit abans de recollir cap dada.",
+    fq4q:"Quant tarda a estar llest?", fq4a:"48 hores des de la primera trucada. Sense tecnicismes.",
+    fq5q:"Funciona amb el meu número de WhatsApp actual?", fq5a:"Sí. Connectem al número que ja fas servir. Els pacients no notaran cap canvi.",
+    fq6q:"I si decideixo cancel·lar?", fq6a:"Sense permanència. Cancel·les amb un WhatsApp quan vulguis. Sense contracte.",
+    cta_tag:"30 dies gratuïts · sense compromís", cta_h2:"La teva clínica mereix\nun assistent així?",
+    cta_sub:"10 minuts de trucada. Sense tecnicismes. Et conto exactament com funcionaria a la teva clínica.",
+    cta_wp:"Escriure al Sinval per WhatsApp",
+    fl1:"Producte", fl1a:"Com funciona", fl1b:"Preu",
+    fl2:"Sectors", fl2a:"Odontologia", fl2b:"Medicina estètica", fl2c:"Fisioteràpia",
+    fl3:"Legal", fl3a:"Política de privacitat", fl3b:"Avís RGPD",
+    fl_made:"Fet amb ❤ per a clíniques que cuiden els seus pacients"
+  },
+  pt:{
+    n_prob:"O problema", n_how:"Como funciona", n_price:"Preço", n_cta:"Falar agora",
+    h_tag:"Novo · Disponível já",
+    h_1a:"A sua clínica atende", h_1b:"24 horas.", h_1c:" Sem contratar", h_1d:"ninguém a mais.",
+    h_sub:"O assistente comercial inteligente que responde no WhatsApp, agenda consultas e resolve dúvidas dos seus pacientes — mesmo às 3 da madrugada.",
+    h_btn1:"Quero ver como funciona", h_btn2:"Ver preço →",
+    st1:"Atendimento contínuo", st2:"Idiomas", st3:"Para estar ativo", st4:"Os primeiros 30 dias",
+    fb_lbl:"Paciente captado às", fb_tag:"Fora do horário ✓",
+    chat1:"Olá, estão abertos agora? Queria perguntar sobre um implante 😅",
+    chat2:"Olá! Sou a Gabriela, da equipa da Dra. Claure 😊 Estamos fechados agora, mas estou aqui para ajudar.",
+    chat3:"Os implantes são uma das nossas especialidades. A Dra. tem 20 anos dedicados a isso, com formação na NYU e Harvard.",
+    chat4:"Perfeito! Como posso marcar consulta?",
+    chat5:"Mesmo aqui! Escolha dia e hora em menos de 1 minuto 👇\n\n🔗 app.clinic-cloud.com/GabrielaClaure",
+    chat_ph:"Escreva uma mensagem...",
+    trust:"Já em uso na &nbsp;<strong>Clínica Odontológica Dra. Gabriela Claure · Barcelona</strong>&nbsp; · Castellano · Català · English · Português",
+    sec_tag:"Setores", sec_h2:"Para qualquer clínica que cuide dos seus pacientes",
+    sec_sub:"Seja odontologia, estética ou medicina geral — o assistente adapta-se ao seu protocolo.",
+    s1:"Odontologia", s2:"Medicina estética", s3:"Clínicas médicas", s4:"Centros de estética", s5:"Fisioterapia", s6:"Oftalmologia",
+    p_tag:"O problema real", p_h2:"Cada noite perdes pacientes que ninguém atende",
+    p_sub:"Escrevem pelo WhatsApp, não recebem resposta, e no dia seguinte procuram outra clínica.",
+    p1h:"O paciente escreve à noite", p1p:"40% das consultas chegam fora do horário. Sem resposta, o interesse arrefece em minutos.",
+    p2h:"Silêncio = concorrente", p2p:"Enquanto o paciente espera a sua resposta, já está a ver o site da clínica ao lado.",
+    p3h:"Receção sobrecarregada", p3p:"A sua equipa passa horas a responder às mesmas perguntas.",
+    p4h:"Consultas perdidas por fricção", p4p:"O assistente agenda em segundos, diretamente no WhatsApp.",
+    f_tag:"Funcionalidades", f_h2:"Tudo o que faz pela sua clínica",
+    f1h:"Disponível 24/7", f1p:"Responde em segundos, qualquer dia, a qualquer hora. Sem filas, sem esperas.",
+    f2h:"Agenda automática", f2p:"O paciente escolhe a consulta diretamente no chat. Confirmação imediata.",
+    f3h:"4 idiomas nativos", f3p:"Deteta o idioma do paciente: castelhano, català, English, português.",
+    f4h:"Responde dúvidas clínicas", f4p:"Sabe o que fazer após uma cirurgia, como cuidar de um implante, quando ir a urgências.",
+    f5h:"Cumpre o RGPD", f5p:"Obtém o consentimento do paciente antes de tratar os seus dados.",
+    f6h:"Tom da sua clínica", f6p:"Não parece um bot. Fala com o tom e a personalidade da sua equipa.",
+    q_text:'"Desde que temos o assistente, nenhum paciente que escreve à noite fica sem resposta. A agenda preenche-se sozinha."',
+    q_clinic:"Clínica Odontológica & Estética Orofacial · Carrer Calvet, 16 · Barcelona",
+    m1:"Mensagens respondidas", m2:"Tempo de arranque", m3:"Atendimento sem parar",
+    hw_tag:"Sem complicações", hw_h2:"Ativo em 3 passos, em 48 horas",
+    s1h:"Chamada de 10 minutos", s1p:"Conta-me como é a tua clínica, os teus tratamentos e como preferes comunicar.",
+    s2h:"Configuramos juntos", s2p:"Adapto o assistente ao teu protocolo. Tu revês e aproves antes de lançar.",
+    s3h:"A funcionar em 48h", s3p:"Ligamos o assistente ao teu WhatsApp. Tu controlas tudo.",
+    pr_tag:"Preço", pr_h2:"Simples. Sem surpresas.", pr_plan:"Assistente Comercial Inteligente",
+    pr_per:"/mês", pr_pilot:"30 dias de piloto gratuito · sem compromisso",
+    pf1:"Assistente ativo 24h no teu WhatsApp", pf2:"Agenda de consultas automática",
+    pf3:"Respostas em castelhano, català, english e português",
+    pf4:"Formado com os protocolos e tratamentos da tua clínica",
+    pf5:"Responde dúvidas clínicas e pós-cirúrgicas", pf6:"Conformidade RGPD integrada",
+    pf7:"Suporte e ajustes contínuos incluídos", pf8:"Sem contrato de permanência",
+    pr_btn:"Começar o piloto gratuito", pr_note:"Sem cartão de crédito · Sem contrato · Cancela quando quiseres",
+    faq_h2:"Perguntas frequentes",
+    fq1q:"Parece um robô a falar com os meus pacientes?", fq1a:"Não. Está configurado com a personalidade da tua clínica. Os pacientes da Dra. Gabriela não sabem que é um assistente.",
+    fq2q:"O que acontece se o paciente quiser falar com uma pessoa?", fq2a:"Identifica quando é necessária intervenção humana e escala para a equipa.",
+    fq3q:"O que acontece com os dados dos meus pacientes?", fq3a:"Cumpre o RGPD. Obtém o consentimento explícito antes de recolher qualquer dado.",
+    fq4q:"Quanto tempo demora a estar pronto?", fq4a:"48 horas após a primeira chamada. Sem tecnicismos.",
+    fq5q:"Funciona com o meu número de WhatsApp atual?", fq5a:"Sim. Ligamos ao número que já usas. Os pacientes não vão notar nenhuma mudança.",
+    fq6q:"E se decidir cancelar?", fq6a:"Sem permanência. Cancelas com um WhatsApp quando quiseres. Sem contrato.",
+    cta_tag:"30 dias grátis · sem compromisso", cta_h2:"A tua clínica merece\num assistente assim?",
+    cta_sub:"10 minutos de chamada. Sem tecnicismos. Explico exactamente como funcionaria na tua clínica.",
+    cta_wp:"Escrever ao Sinval pelo WhatsApp",
+    fl1:"Produto", fl1a:"Como funciona", fl1b:"Preço",
+    fl2:"Setores", fl2a:"Odontologia", fl2b:"Medicina estética", fl2c:"Fisioterapia",
+    fl3:"Legal", fl3a:"Política de privacidade", fl3b:"Aviso RGPD",
+    fl_made:"Feito com ❤ para clínicas que cuidam dos seus pacientes"
+  },
+  en:{
+    n_prob:"The problem", n_how:"How it works", n_price:"Pricing", n_cta:"Let's talk",
+    h_tag:"New · Available now",
+    h_1a:"Your clinic attends", h_1b:"24 hours.", h_1c:" Without hiring", h_1d:"anyone else.",
+    h_sub:"The intelligent commercial assistant that replies on WhatsApp, books appointments and answers your patients' questions — even at 3 in the morning.",
+    h_btn1:"I want to see how it works", h_btn2:"See pricing →",
+    st1:"Continuous care", st2:"Languages", st3:"To go live", st4:"First 30 days",
+    fb_lbl:"Patient captured at", fb_tag:"Outside office hours ✓",
+    chat1:"Hi, are you open now? I wanted to ask about an implant 😅",
+    chat2:"Hi! I'm Gabriela, from Dr. Claure's team 😊 We're closed right now, but I'm here to help you.",
+    chat3:"Implants are one of our specialities. The Dr. has 20 years dedicated to this, with training at NYU and Harvard.",
+    chat4:"Perfect! How can I book an appointment?",
+    chat5:"Right here! Choose your day and time in under 1 minute 👇\n\n🔗 app.clinic-cloud.com/GabrielaClaure",
+    chat_ph:"Write a message...",
+    trust:"Already in use at &nbsp;<strong>Clínica Odontológica Dra. Gabriela Claure · Barcelona</strong>&nbsp; · Español · Català · English · Português",
+    sec_tag:"Sectors", sec_h2:"For any clinic that cares about its patients",
+    sec_sub:"Whether you treat smiles, wellness or aesthetics — the assistant adapts to your protocol and treatments.",
+    s1:"Dentistry", s2:"Aesthetic medicine", s3:"Medical clinics", s4:"Beauty centres", s5:"Physiotherapy", s6:"Ophthalmology",
+    p_tag:"The real problem", p_h2:"Every night you lose patients nobody attends",
+    p_sub:"They message on WhatsApp, get no reply, and the next day they find another clinic. Silent, but costly.",
+    p1h:"The patient writes at night", p1p:"40% of enquiries arrive outside office hours. Without an immediate reply, interest fades within minutes.",
+    p2h:"Silence = competitor", p2p:"While the patient waits for your reply, they're already browsing the clinic next door.",
+    p3h:"Overwhelmed reception", p3p:"Your team spends hours answering the same questions. Time they could spend on in-person patients.",
+    p4h:"Appointments lost to friction", p4p:"The assistant books in seconds, directly on WhatsApp. No phone calls needed.",
+    f_tag:"Features", f_h2:"Everything it does for your clinic",
+    f1h:"Available 24/7", f1p:"Replies in seconds, any day, any hour. No queues, no waiting, no extra staffing costs.",
+    f2h:"Automatic booking", f2p:"The patient picks their appointment directly in the chat. Instant confirmation. No calls.",
+    f3h:"4 native languages", f3p:"Automatically detects the patient's language: Spanish, Catalan, English, Portuguese.",
+    f4h:"Answers clinical questions", f4p:"Knows what to do after surgery, how to care for an implant, when to go to A&E. Trained on your protocol.",
+    f5h:"GDPR compliant", f5p:"Obtains patient consent before processing any data. Process integrated into the conversation.",
+    f6h:"Your clinic's tone", f6p:"Doesn't sound like a bot. Speaks with your team's tone and personality. Patients never notice.",
+    q_text:'"Since we have the assistant, no patient who writes at night goes unanswered. The schedule fills itself. The team can focus on what really matters: in-person care."',
+    q_clinic:"Odontology & Orofacial Aesthetic Clinic · Carrer Calvet, 16 · Barcelona",
+    m1:"Messages answered", m2:"Time to go live", m3:"Non-stop care",
+    hw_tag:"No complications", hw_h2:"Live in 3 steps, within 48 hours",
+    s1h:"10-minute call", s1p:"Tell me about your clinic, your treatments and how you like to communicate with patients. No jargon.",
+    s2h:"We configure together", s2p:"I adapt the assistant to your protocol and tone. You review and approve before launch.",
+    s3h:"Live within 48h", s3p:"We connect the assistant to your WhatsApp. You control everything and can step in at any time.",
+    pr_tag:"Pricing", pr_h2:"Simple. No surprises.", pr_plan:"Intelligent Commercial Assistant",
+    pr_per:"/month", pr_pilot:"30-day free pilot · no commitment",
+    pf1:"Assistant active 24h on your WhatsApp", pf2:"Automatic appointment booking",
+    pf3:"Replies in Spanish, Catalan, English and Portuguese",
+    pf4:"Trained on your clinic's protocols and treatments",
+    pf5:"Answers clinical and post-surgery questions", pf6:"Integrated GDPR compliance",
+    pf7:"Ongoing support and adjustments included", pf8:"No lock-in contract",
+    pr_btn:"Start the free pilot", pr_note:"No credit card · No contract · Cancel anytime",
+    faq_h2:"Frequently asked questions",
+    fq1q:"Does it sound like a robot talking to my patients?", fq1a:"No. The assistant is configured with your clinic's personality. It responds naturally and empathetically. Patients at Dr. Gabriela's clinic don't know it's an assistant.",
+    fq2q:"What if the patient wants to speak to a person?", fq2a:"The assistant identifies when human intervention is needed (emergencies, complaints, complex cases) and escalates to your team. You can join any conversation at any time.",
+    fq3q:"What happens to my patients' data? Is it GDPR compliant?", fq3a:"Yes, it complies with GDPR (EU Regulation 2016/679). The assistant obtains explicit consent before collecting any data. Data is never shared with third parties.",
+    fq4q:"How long does it take to be ready?", fq4a:"48 hours from our first call. No jargon, no complications.",
+    fq5q:"Does it work with my existing WhatsApp number?", fq5a:"Yes. We connect the assistant to the WhatsApp Business number your clinic already uses. Patients won't notice any change.",
+    fq6q:"What if I decide to cancel?", fq6a:"No lock-in. Cancel with a WhatsApp message whenever you want. No contract to sign, no penalty.",
+    cta_tag:"30 days free · no commitment", cta_h2:"Does your clinic deserve\nan assistant like this?",
+    cta_sub:"10-minute call. No jargon. I'll explain exactly how it would work for your clinic.",
+    cta_wp:"Message Sinval on WhatsApp",
+    fl1:"Product", fl1a:"How it works", fl1b:"Pricing",
+    fl2:"Sectors", fl2a:"Dentistry", fl2b:"Aesthetic medicine", fl2c:"Physiotherapy",
+    fl3:"Legal", fl3a:"Privacy policy", fl3b:"GDPR notice",
+    fl_made:"Made with ❤ for clinics that care about their patients"
+  }
+};
+
+let currentLang = 'es';
+
+function setLang(lang){
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim().toLowerCase() === lang);
+  });
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(T[lang] && T[lang][key] !== undefined){
+      el.innerHTML = T[lang][key];
+    }
+  });
+  document.documentElement.lang = lang === 'ca' ? 'ca' : lang === 'pt' ? 'pt-BR' : lang === 'en' ? 'en' : 'es';
+}
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); }
+  });
+});
+</script>
+</body>
+</html>
